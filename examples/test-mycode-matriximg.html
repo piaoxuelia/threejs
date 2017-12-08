@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>three.js css3d - periodic table</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			html, body {
+				height: 100%;
+			}
+
+			body {
+				background-color: #000000;
+				margin: 0;
+				font-family: Helvetica, sans-serif;;
+				overflow: hidden;
+			}
+
+			a {
+				color: #ffffff;
+			}
+			.item{
+				position: relative;
+			}
+			.item,
+			.item img{
+				width:326px;
+				height: 217px;
+			}
+			.item img{
+				opacity: .8
+			}
+			.item span{
+				position: absolute;
+				bottom: 0;
+				width: 100%;
+				left: 0;
+				font-style: 16px;
+				color: #fff;
+				background: rgba(0,0,0,.5);
+				line-height: 40px;
+				text-align: center;
+			}
+			
+		</style>
+	</head>
+	<body>
+		<script src="../build/three.js"></script>
+		<script src="js/libs/tween.min.js"></script>
+		<script src="js/controls/TrackballControls.js"></script>
+		<script src="js/renderers/CSS3DRenderer.js"></script>
+
+		<div id="wrapper"></div>
+
+
+		<script>
+			var table = [
+				'西岳峥嵘何壮哉！','http://p0.so.qhimgs1.com/bdr/326__/t011fdff1cc0c3b5ddc.jpg',1,1,
+				'培田古村落', 'http://p2.so.qhimgs1.com/bdr/326__/t01279fce5fe1f2724e.jpg',2,1,
+				'离西湖很近，离喧嚣很远','http://p1.so.qhimgs1.com/bdr/326__/t01d51d0555bd71a76d.jpg',1,2,
+				'首尔','http://p2.so.qhimgs1.com/bdr/326__/t01d8f3a130704bb822.jpg',2,2,
+				'细细品味新加坡','http://p0.so.qhmsg.com/bdr/326__/t01c3af0dd9ce5fed4f.jpg',1,3,
+				'十一我们去北京','http://p4.so.qhimgs1.com/bdr/326__/t0198ead75c49df97f4.jpg',2,3,
+				'夏日旅行 - 云南','http://p0.so.qhmsg.com/bdr/326__/t01e171bb31d2f80095.jpg',1,4,
+				'首尔','http://p2.so.qhimgs1.com/bdr/326__/t01d8f3a130704bb822.jpg',2,4
+			];
+
+			var scene, camera, renderer;
+			var objects = [];//存储最初的节点位置
+			var tables = [];
+			var controls;
+
+			function init(){
+				camera = new THREE.PerspectiveCamera(10, window.innerWidth/window.innerHeight, 1, 30000);
+				camera.position.z = 8000;
+
+				scene = new THREE.Scene();
+
+				for(var i = 0; i<table.length; i+=4){
+					var element = document.createElement('div');
+					element.className = 'item';
+
+					var img = document.createElement('img');
+					img.src = table[i+1];
+
+					var title = document.createElement('span');
+					title.innerHTML = table[i];
+
+					element.appendChild(img);
+					element.appendChild(title);
+
+					var object = new THREE.CSS3DObject(element);
+					object.position.x = Math.random()*4000-2000;
+					object.position.y = Math.random()*4000-2000;
+					object.position.z = Math.random()*4000-2000;
+
+					scene.add(object);
+
+					objects.push(object);
+
+					var object = new THREE.Object3D();
+					object.position.x = 0;
+					object.position.y = 0;
+					object.position.z = ( Math.floor( i / 4 ) ) * 1000 - 2000;
+					tables.push(object);
+					
+				}
+
+				renderer = new THREE.CSS3DRenderer();
+				renderer.setSize(window.innerWidth, window.innerHeight);
+
+				
+
+				renderer.domElement.style.position = 'absolute';
+				document.getElementById('wrapper').appendChild(renderer.domElement);
+
+				controls = new THREE.TrackballControls(camera, renderer.domElement);
+				controls.rotateSpeed = .5;
+				controls.addEventListener('change', render);
+
+				transform(tables, 1000);
+			}
+
+			function transform(targets, duration){
+				TWEEN.removeAll();
+				for(var i = 0; i<targets.length; i++){
+					var object = objects[i];
+					var target = tables[i];
+
+					new TWEEN.Tween(object.position).
+					to({
+						x:target.position.x,
+						y:target.position.y,
+						z:target.position.z
+					},Math.random()*duration + duration)
+					.easing(TWEEN.Easing.Exponential.InOut)
+					.start();
+
+					// new TWEEN.Tween(object.rotation).
+					// to({
+					// 	x:target.position.x,
+					// 	y:target.position.y,
+					// 	z:target.position.z
+					// },Math.random()*duration + duration)
+					// .easing(TWEEN.Easing.Exponential.InOut)
+					// .start();
+				}
+
+				new TWEEN.Tween(this)
+				.to({},duration*2)
+				.onUpdate(render)
+				.start();
+			}
+
+			function render(){
+				renderer.render(scene, camera);
+			}
+
+			function animate(){
+				requestAnimationFrame(animate);
+				TWEEN.update();
+				controls.update();
+			}
+
+
+
+			init();
+			animate();
+
+		</script>
+	</body>
+</html>
