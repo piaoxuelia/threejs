@@ -1,7 +1,9 @@
 var files = {
 	"amytest":[
 		'amytest_lyy_start',
-		'amytest_lyy_example'
+		'amytest_lyy_example',
+		'amytest_lyy_material',
+		'amytest_lyy_justTest'
 	],
 	"webgl": [
 		"webgl_animation_cloth",

@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>three.js css3d - start</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body{
+				margin: 0;
+				overflow: hidden;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- 
+			需要查的属性 antialias  WebGLRenderer的属性   MeshLambertMaterial  AmbientLight  vertices  Face3 Float32Array
+			addAttribute
+		 -->
+		<canvas id="myCanvas"></canvas>
+		<script src="../build/three.js"></script>
+		<script type="text/javascript">
+
+			var canvas = document.getElementById('myCanvas');
+			var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true});
+			renderer.setClearColor(0x333333);
+			renderer.setPixelRatio(window.devicePixelRatio);
+			renderer.setSize(window.innerWidth, window.innerHeight);
+
+			var camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight, 0.1 ,5000)
+
+			var scene = new THREE.Scene();
+			var light = new THREE.AmbientLight(0xffffff, 0.5);
+			scene.add(light);
+
+			var light1=new THREE.PointLight(0xffffff, 0.5);
+			scene.add(light1);
+
+			var material,mesh,material1,mesh1,material2,mesh2,material3,mesh3;
+			function showBasic(){
+				material = new THREE.MeshBasicMaterial({//或者如下;
+					color:0x044d67,
+					transparent:true,
+					opacity:1,
+					// wireframe:true,
+					// wireframeLinewidth:2,
+					// wireframeLinejoin:'round',
+					// wireframeLinecap:'round',
+				});
+
+				// 立方体
+				var geometry = new THREE.BoxGeometry(100,100,100);
+				mesh = new THREE.Mesh(geometry,material);
+				mesh.position.z = -1000;
+				mesh.position.x = -200;
+				scene.add(mesh);
+
+				// 圆形
+				var geometry1 = new THREE.SphereGeometry(60,30,30);
+				var mesh1 = new THREE.Mesh(geometry1,material);
+				mesh1.position.z=-1000;
+				mesh1.position.x = 200;
+				scene.add(mesh1);
+
+				// 平面
+				var geometry2 = new THREE.PlaneGeometry(10000,10000,100,100);
+				mesh2 = new THREE.Mesh(geometry2,material);
+				mesh2.rotation.x = -90*Math.PI/180;
+				mesh2.position.y= -100;
+				scene.add(mesh2);
+
+				// 十二面体
+				var geometry3 = new THREE.DodecahedronGeometry(80,0);
+				mesh3 = new THREE.Mesh(geometry3,material);
+				mesh3.rotation.x = 0;
+				mesh3.position.z= -1000;
+				scene.add(mesh3);
+
+			}
+
+			//彩色的
+			function showNormal(){
+				material = new THREE.MeshNormalMaterial({
+					color:0x044d67,
+					transparent:true,
+					opacity:1,
+					// wireframe:true,
+					// wireframeLinewidth:2,
+					// wireframeLinejoin:'round',
+					// wireframeLinecap:'round',
+				});
+				// 立方体
+				var geometry = new THREE.BoxGeometry(100,100,100);
+				mesh = new THREE.Mesh(geometry,material);
+				mesh.position.z = -1000;
+				mesh.position.x = -200;
+				scene.add(mesh);
+
+				// 圆形
+				var geometry1 = new THREE.SphereGeometry(60,30,30);
+				var mesh1 = new THREE.Mesh(geometry1,material);
+				mesh1.position.z=-1000;
+				mesh1.position.x = 200;
+				scene.add(mesh1);
+
+				// 平面
+				var geometry2 = new THREE.PlaneGeometry(10000,10000,100,100);
+				mesh2 = new THREE.Mesh(geometry2,material);
+				mesh2.rotation.x = -90*Math.PI/180;
+				mesh2.position.y= -100;
+				scene.add(mesh2);
+
+				// 十二面体
+				var geometry3 = new THREE.DodecahedronGeometry(80,0);
+				mesh3 = new THREE.Mesh(geometry3,material);
+				mesh3.rotation.x = 0;
+				mesh3.position.z= -1000;
+				scene.add(mesh3);
+			}
+
+			//不包括任何镜面反射
+			function showLambert(){
+				material = new THREE.MeshLambertMaterial({
+					color:0xffffff,//高光
+					// emissive:0x00ff00,//放射光
+					// side:THREE.BackSide,
+					map:new THREE.TextureLoader().load('textures/disturb.jpg'),
+					map:new THREE.TextureLoader().load('textures/metal.jpg'),
+				});
+			}
+
+			// 镜面反射
+			function showPhong(){
+				material = new THREE.MeshPhongMaterial({
+					color:0xf3ffe2,
+					specular:0xffffff,
+					shineness:100,
+					// map:new THREE.TextureLoader().load('textures/transition/transition3.png'),
+					// normalMap:new THREE.TextureLoader().load('textures/metal.jpg'),
+				});
+
+				// 立方体
+				var geometry = new THREE.BoxGeometry(100,100,100);
+				mesh = new THREE.Mesh(geometry,material);
+				mesh.position.z = -1000;
+				mesh.position.x = -200;
+				scene.add(mesh);
+
+				// 圆形
+				var geometry1 = new THREE.SphereGeometry(60,30,30);
+				var mesh1 = new THREE.Mesh(geometry1,material);
+				mesh1.position.z=-1000;
+				mesh1.position.x = 200;
+				scene.add(mesh1);
+
+				// 平面
+				var geometry2 = new THREE.PlaneGeometry(10000,10000,100,100);
+				mesh2 = new THREE.Mesh(geometry2,material);
+				mesh2.rotation.x = -90*Math.PI/180;
+				mesh2.position.y= -100;
+				scene.add(mesh2);
+
+				// 十二面体
+				var geometry3 = new THREE.DodecahedronGeometry(80,0);
+				mesh3 = new THREE.Mesh(geometry3,material);
+				mesh3.rotation.x = 0;
+				mesh3.position.z= -1000;
+				scene.add(mesh3);
+			}
+
+			//实线
+			function showLine(){
+				material = new THREE.MeshBasicMaterial();//line
+
+				// 立方体
+				var geometry = new THREE.BoxGeometry(100,100,100);
+				mesh = new THREE.Line(geometry,material); //line
+				mesh.position.z = -1000;
+				mesh.position.x = -200;
+				scene.add(mesh);
+
+				// 圆形
+				var geometry1 = new THREE.SphereGeometry(60,30,30);
+				mesh1 = new THREE.Line(geometry1,material); //line
+				mesh1.position.z=-1000;
+				mesh1.position.x = 200;
+				scene.add(mesh1);
+
+				// 平面
+				var geometry2 = new THREE.PlaneGeometry(10000,10000,100,100);
+				mesh2 = new THREE.Line(geometry2,material); //line
+				mesh2.rotation.x = -90*Math.PI/180;
+				mesh2.position.y= -100;
+				scene.add(mesh2);
+
+				// 十二面体
+				var geometry3 = new THREE.DodecahedronGeometry(80,0);
+				mesh3 = new THREE.Line(geometry3,material); //line
+				mesh3.rotation.x = 0;
+				mesh3.position.z= -1000;
+				scene.add(mesh3);
+			}
+			//虚线
+			function showLineDashed(){
+				material = new THREE.LineDashedMaterial({//linedash
+					dashSize:2,
+					gapSize:2
+				});
+				// 立方体
+				var geometry = new THREE.BoxGeometry(100,100,100);
+				mesh = new THREE.Line(geometry,material); //line
+				mesh.position.z = -1000;
+				mesh.position.x = -200;
+				scene.add(mesh);
+
+				// 圆形
+				var geometry1 = new THREE.SphereGeometry(60,30,30);
+				mesh1 = new THREE.Line(geometry1,material); //line
+				mesh1.position.z=-1000;
+				mesh1.position.x = 200;
+				scene.add(mesh1);
+
+				// 平面
+				var geometry2 = new THREE.PlaneGeometry(10000,10000,100,100);
+				mesh2 = new THREE.Line(geometry2,material); //line
+				mesh2.rotation.x = -90*Math.PI/180;
+				mesh2.position.y= -100;
+				scene.add(mesh2);
+
+				// 十二面体
+				var geometry3 = new THREE.DodecahedronGeometry(80,0);
+				mesh3 = new THREE.Line(geometry3,material); //line
+				mesh3.rotation.x = 0;
+				mesh3.position.z= -1000;
+				scene.add(mesh3);
+
+				// Dash
+				geometry.computeLineDistances();  //linedash
+				geometry1.computeLineDistances(); //linedash
+				geometry2.computeLineDistances(); //linedash
+			}
+			// 点
+			function showPoint(){
+				material = new THREE.PointsMaterial( { color: 0xffffff ,size:5} );//points
+				// 立方体
+				var geometry = new THREE.BoxGeometry(100,100,100);
+				mesh = new THREE.Points(geometry,material); //line
+				mesh.position.z = -1000;
+				mesh.position.x = -200;
+				scene.add(mesh);
+
+				// 圆形
+				var geometry1 = new THREE.SphereGeometry(60,30,30);
+				mesh1 = new THREE.Points(geometry1,material); //line
+				mesh1.position.z=-1000;
+				mesh1.position.x = 200;
+				scene.add(mesh1);
+
+				// 平面
+				var geometry2 = new THREE.PlaneGeometry(10000,10000,100,100);
+				mesh2 = new THREE.Points(geometry2,material); //line
+				mesh2.rotation.x = -90*Math.PI/180;
+				mesh2.position.y= -100;
+				scene.add(mesh2);
+
+				// 十二面体
+				var geometry3 = new THREE.DodecahedronGeometry(80,0);
+				mesh3 = new THREE.Points(geometry3,material); //line
+				mesh3.rotation.x = 0;
+				mesh3.position.z= -1000;
+				scene.add(mesh3);
+			}
+
+			// 一直面对相机的
+			function showSprite(){
+				var material = new THREE.SpriteMaterial({ //Sprite
+					map:new THREE.TextureLoader().load('textures/metal.jpg')
+				});
+				mesh = new THREE.Sprite(material); //Sprite
+				mesh.scale.set(300.300,200);
+
+				mesh.position.z = -1000;
+				mesh.position.x = -200;
+				scene.add(mesh);
+			}
+
+
+			// showBasic();
+			// showNormal();
+			// showPhong();
+			// showLine();
+			// showLineDashed();
+			// showPoint();
+			// showSprite();
+
+			render();
+			
+			function render () {
+				mesh.rotation.x+=0.02;
+				mesh.rotation.y+=0.01;
+
+				// if(typeof mesh3.rotation){
+				// 	mesh3.rotation.x-=0.02;
+				// 	mesh3.rotation.z-=0.02;
+				// }
+				// mesh1.position.z-=3;
+				renderer.render(scene,camera)
+				requestAnimationFrame(render);
+			
+			}
+			
+			
+
+
+		</script>
+	</body>
+</html>

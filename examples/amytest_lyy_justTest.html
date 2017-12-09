@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>three.js css3d - start</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body{
+				margin: 0;
+				overflow: hidden;
+			}
+
+			canvas{
+				background: red;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- 
+			需要查的属性 antialias  WebGLRenderer的属性   MeshLambertMaterial  AmbientLight  vertices  Face3 Float32Array
+			addAttribute
+		 -->
+		<canvas id="myCanvas"></canvas>
+		<script src="../build/three.js"></script>
+		<script type="text/javascript">
+
+			// var canvas = document.getElementById('myCanvas');
+			// var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true});
+			// renderer.setClearColor(0x555555);
+			// renderer.setPixelRatio(window.devicePixelRatio);
+			// renderer.setSize(window.innerWidth, window.innerHeight);
+
+			// var camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight, 0.1 ,5000)
+
+			// var scene = new THREE.Scene();
+			// var light = new THREE.AmbientLight(0xffffff, 0.5);
+			// scene.add(light);
+
+			// var light1=new THREE.PointLight(0xffffff, 0.5);
+			// scene.add(light1);
+
+			// var geometry = new THREE.CubeGeometry(100,100,100);
+			// // var material = new THREE.MeshBasicMaterial();
+			// var material = new THREE.MeshLambertMaterial({color:0x55aaad});
+			// var mesh = new THREE.Mesh(geometry,material);
+			// mesh.position.set(0,0,-800);
+			// scene.add(mesh);
+			// render();
+			// function render () {
+			// 	mesh.rotation.x+=0.02;
+			// 	mesh.rotation.y+=0.01;
+			// 	renderer.render(scene,camera)
+			// 	requestAnimationFrame(render);
+			
+			// }
+			// 
+			// 
+			var canvas = document.getElementById('myCanvas');
+			var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true});
+			renderer.setClearColor(0x555555);
+			renderer.setPixelRatio(window.devicePixelRatio);
+			renderer.setSize(window.innerWidth, window.innerHeight);
+
+			var camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight, 0.1 ,5000)
+
+			var scene = new THREE.Scene();
+			var light = new THREE.AmbientLight(0xffffff, 0.5);
+			scene.add(light);
+
+			var light1=new THREE.PointLight(0xffffff, 0.5);
+			scene.add(light1);
+
+			// var geometry = new THREE.Geometry(100,100,100);
+			// 	geometry.vertices.push(
+			// 		new THREE.Vector3(-20,20,0),
+			// 		new THREE.Vector3(-20,-20,0),
+			// 		new THREE.Vector3(20,-20,0)
+			// 	);
+			// 	geometry.faces.push(new THREE.Face3(0,1,2));
+
+
+
+			// var geometry = new THREE.BufferGeometry();
+			// var vertices = new Float32Array([
+			// 	-20.0,20.0,0.0,
+			// 	-20.0,-20.0,0.0,
+			// 	20.0,-20.0,0.0,
+			// 	])
+			// geometry.addAttribute('position',new THREE.BufferAttribute(vertices,3));
+			// 
+			// var geometry = new THREE.PlaneGeometry(100,100);
+
+			
+			// 绘制四个顶点
+			// 
+			// var geometry = new THREE.BufferGeometry();
+			// var vertices = new Float32Array([
+			// 		 -20.0, -20.0,  0.0,
+			// 		 20.0, -20.0,  0.0,
+			// 		 20.0,  20.0,  0.0,
+
+			// 		 20.0,  20.0,  0.0,
+			// 		-20.0,  20.0,  0.0,
+			// 		-20.0, -20.0,  0.0
+
+			// 	])
+			// // vertices 是顶点的坐标， 三角形需要三个点坐标，四边形下需要6个点，左下和右上
+			// // (vertices,3) 每个顶点坐标有三个值
+			// geometry.addAttribute('position',new THREE.BufferAttribute(vertices,3));
+
+			// var geometry = new THREE.SphereGeometry(100,20,20);//4边数 球体
+			// 
+			// var geometry = new THREE.CircleGeometry(100,8);//4边数 圆形
+			
+			// var geometry = new THREE.CircleBufferGeometry(50,10);//边数 圆形
+			
+			// var geometry = new THREE.ConeGeometry(100,200,20);//半径 高度，边数
+			// 
+			// var geometry = new THREE.CylinderGeometry(50,50,100,20,20,false); //圆柱体
+
+			var  geometry = new THREE.DodecahedronGeometry(100,0); //罗马十二面体：每个面等边五角形
+			// 
+			// var  geometry = new THREE.IcosahedronGeometry(100,0); //数学十二面体：每个面等边三角形
+			// 
+			// 
+			 // var  geometry = new THREE.OctahedronGeometry(100,0); //数学8面体：每个面等边三角形
+
+			// var geometry = new THREE.RingGeometry(80,100,5); //环  （内半径，外半径、边数） 
+			
+			//var geometry = new THREE.TetrahedronGeometry(100,0); //四面体
+
+			// var geometry = new THREE.TorusGeometry(100,40,5,20)//（环形体的半径，小横截面积的半径，小横截面的边数，大环形体边数）
+			// 
+			// var geometry  = new THREE.TorusKnotGeometry(100,10,50,100); //穿插的管道
+			
+			// 文字 先将字体的json文件load进来，然后再渲染
+			// 
+			// var loader = new THREE.FontLoader();
+			// loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+			// 	loader.parse(font);
+			// 	var geometry = new THREE.TextGeometry('THREE',{font:font,size:120, height:10, material:0, bevelThickness:1, extrudeMaterial:1});
+			// 	var material = new THREE.MeshLambertMaterial({color:0xffffff});
+			// 	mesh = new THREE.Mesh(geometry,material);
+			// 	mesh.position.set(-200,-20,-800);
+			// 	scene.add(mesh);
+			// 	render(mesh);
+			// } );
+
+
+
+			//心形
+
+			// var x = 0, y = 0;
+
+			// var heartShape = new THREE.Shape();
+
+			// heartShape.moveTo( x + 5, y + 5 );
+			// heartShape.bezierCurveTo( x + 5, y + 5, x + 4, y, x, y );
+			// heartShape.bezierCurveTo( x - 6, y, x - 6, y + 7,x - 6, y + 7 );
+			// heartShape.bezierCurveTo( x - 6, y + 11, x - 3, y + 15.4, x + 5, y + 19 );
+			// heartShape.bezierCurveTo( x + 12, y + 15.4, x + 16, y + 11, x + 16, y + 7 );
+			// heartShape.bezierCurveTo( x + 16, y + 7, x + 16, y, x + 10, y );
+			// heartShape.bezierCurveTo( x + 7, y, x + 5, y + 5, x + 5, y + 5 );
+
+			// var geometry = new THREE.ShapeGeometry( heartShape ); //平面
+
+			// var geometry = new THREE.ExtrudeGeometry(heartShape, {//体
+			// 	amount:10, // 高
+			// 	bevelEnabled:false, 
+			// 	bevelSegents:2,
+			// 	steps:5,
+			// 	bevelSize:12,
+			// 	bevelThickness:1
+			// });
+
+
+
+
+			var material = new THREE.MeshLambertMaterial({color:0xffffff});
+			var mesh = new THREE.Mesh(geometry,material);
+
+			mesh.position.set(0,0,-1000);
+			scene.add(mesh);
+
+			render();
+			renderer.render(scene,camera)
+
+			var delta = 0;
+			function render () {
+				delta+=0.1;
+				// geometry.vertices[0].x = -25+Math.sin(delta)*50;
+			
+				geometry.verticesNeedUpdate = true;
+				mesh.rotation.x+=0.02;
+				mesh.rotation.z+=0.01;
+				renderer.render(scene,camera)
+				requestAnimationFrame(render);
+			}
+
+		</script>
+	</body>
+</html>
