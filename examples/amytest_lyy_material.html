@@ -26,6 +26,8 @@
 			renderer.setPixelRatio(window.devicePixelRatio);
 			renderer.setSize(window.innerWidth, window.innerHeight);
 
+			 
+
 			var camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight, 0.1 ,5000)
 
 			var scene = new THREE.Scene();
@@ -80,7 +82,7 @@
 			//彩色的
 			function showNormal(){
 				material = new THREE.MeshNormalMaterial({
-					color:0x044d67,
+					// color:0x044d67,
 					transparent:true,
 					opacity:1,
 					// wireframe:true,
@@ -285,7 +287,7 @@
 
 
 			// showBasic();
-			// showNormal();
+			showNormal();
 			// showPhong();
 			// showLine();
 			// showLineDashed();
@@ -308,7 +310,12 @@
 			
 			}
 			
-			
+			window.addEventListener( 'resize', onWindowResize, false );
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
 
 
 		</script>

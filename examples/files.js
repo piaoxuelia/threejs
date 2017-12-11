@@ -2,8 +2,13 @@ var files = {
 	"amytest":[
 		'amytest_lyy_start',
 		'amytest_lyy_example',
+		'amytest_lyy_geometry',
 		'amytest_lyy_material',
-		'amytest_lyy_justTest'
+		'amytest_lyy_light',
+		'amytest_lyy_panorama',
+		'amytest_lyy_particles_random',
+		'amytest_lyy_cssRanderer',
+		
 	],
 	"webgl": [
 		"webgl_animation_cloth",

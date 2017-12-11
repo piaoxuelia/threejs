@@ -19,49 +19,35 @@
 		<canvas id="myCanvas"></canvas>
 		<script src="../build/three.js"></script>
 		<script type="text/javascript">
-			var renderer = new THREE.WebGLRenderer({
-				canvas:document.getElementById('myCanvas'),
-				antialias:true
-			})
-
-			renderer.setClearColor(0x000000);
+			var canvas = document.getElementById('myCanvas');
+			var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true});
+			renderer.setClearColor(0x555555);
 			renderer.setPixelRatio(window.devicePixelRatio);
 			renderer.setSize(window.innerWidth, window.innerHeight);
 
-			var camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight,0.1,3000);
+			var camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight, 0.1 ,5000)
 
 			var scene = new THREE.Scene();
-
-			//加光线
-			var light = new THREE.AmbientLight(0xffffff,0.5);
+			var light = new THREE.AmbientLight(0xffffff, 0.5);
 			scene.add(light);
 
-			var light1 = new THREE.PointLight(0xffffff,0.5);
+			var light1=new THREE.PointLight(0xffffff, 0.5);
 			scene.add(light1);
 
-
-			//CubeGeometry = BoxGeometry
 			var geometry = new THREE.CubeGeometry(100,100,100);
-			// var material = new THREE.MeshBasicMaterial({color:0x666666});
-			//贴图配合光线
-			var material = new THREE.MeshLambertMaterial({color:0xff0000});
-			var mesh = new 	THREE.Mesh(geometry, material);
-
+			// var material = new THREE.MeshBasicMaterial();
+			var material = new THREE.MeshLambertMaterial({color:0x55aaad});
+			var mesh = new THREE.Mesh(geometry,material);
 			mesh.position.set(0,0,-800);
 			scene.add(mesh);
-
-			// renderer.render(scene, camera);
-
-
 			render();
-			function render(){
-				mesh.rotation.x += 0.02;
-				mesh.rotation.y += 0.02;
-				renderer.render(scene, camera);
+			function render () {
+				mesh.rotation.x+=0.02;
+				mesh.rotation.y+=0.01;
+				renderer.render(scene,camera)
 				requestAnimationFrame(render);
+			
 			}
-
-
 
 
 		</script>

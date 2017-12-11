@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>three.js css3d - start</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body{
+				margin: 0;
+				overflow: hidden;
+			}
+
+			canvas{
+				background: red;
+			}
+			#shapes{
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+			#shapes li{
+				display: inline-block;
+			}
+			#shapes li a{
+				display: inline-block;
+				padding:0 15px;
+				line-height: 1.6;
+				color: #ccc;
+				background: #666;
+				margin-bottom: 10px;
+				margin-right: 10px;
+				border-radius: 3px;
+				cursor: pointer;
+			}
+			#shapes li a:hover{
+				background: #000;
+			}
+			#viewSrcButton{
+				display: none
+			}
+		</style>
+	</head>
+	<body>
+		<!-- 
+			需要查的属性 antialias  WebGLRenderer的属性   MeshLambertMaterial  AmbientLight  vertices  Face3 Float32Array
+			addAttribute
+		 -->
+		<canvas id="myCanvas"></canvas>
+
+		<ul id="shapes">
+			
+		</ul>
+		<script type="text/javascript" src="http://s1.qhres.com/static/6fd90c57807f2217/module/comp/jquery.js"></script>
+
+
+
+		<script src="../build/three.js"></script>
+		<script type="text/javascript">
+		
+			function insertShapeList(){
+				var shapesWrap = document.getElementById('shapes');
+				var shapeCollection={
+					'triangle':'三角形',
+					'triangleBuffter':'三角形Buffter',
+					'plane':'四边形',
+					'sphere':'球体',
+					'circle':'圆形',
+					'circleBuffer':'圆形Buffer',
+					'cone':'圆锥体',
+					'cylinder':'圆柱体',
+					'Dodecahedron':'罗马十二面体',
+					'icosahedron':'数学十二面体',
+					'octahedron':'数学8面体',
+					'tetrahedron':'四面体',
+					'ring':'环形',
+					'torus':'管道',
+					'torusKnot':'交叉管道',
+					'textrun':'文字',
+					'shapeHeart':'心形'
+				};
+				var html = '';
+				for(var i in shapeCollection){
+					html+='<li data-name="'+i+'"><a>'+shapeCollection[i]+'</a></li>';
+				}
+
+				shapesWrap.innerHTML=html;
+			}
+			insertShapeList();
+
+
+			var canvas, renderer, camera, scene, light, light1, geometry;
+			function init(){
+				canvas = document.getElementById('myCanvas');
+				renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true});
+
+				renderer.setClearColor(0x555555);
+				renderer.setPixelRatio(window.devicePixelRatio);
+				renderer.setSize(window.innerWidth, window.innerHeight);
+
+				camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight, 0.1 ,5000);
+
+				scene = new THREE.Scene();
+				light = new THREE.AmbientLight(0xffffff, 0.5);
+				scene.add(light);
+
+				light1=new THREE.PointLight(0xffffff, 0.5);
+				scene.add(light1);
+
+				window.addEventListener( 'resize', onWindowResize, false );
+			}
+
+			
+
+			function triangle(){
+				var geometry = new THREE.Geometry();
+				geometry.vertices.push(
+					new THREE.Vector3(-20,20,0),
+					new THREE.Vector3(-20,-20,0),
+					new THREE.Vector3(20,-20,0)
+				);
+				geometry.faces.push(new THREE.Face3(0,1,2));
+				return geometry;
+			}
+			
+			function triangleBuffter(){
+				var geometry = new THREE.BufferGeometry();
+				var vertices = new Float32Array([
+					-20.0,20.0,0.0,
+					-20.0,-20.0,0.0,
+					20.0,-20.0,0.0,
+					])
+				geometry.addAttribute('position',new THREE.BufferAttribute(vertices,3));
+
+
+				// 绘制四个顶点
+				// 
+				// var geometry = new THREE.BufferGeometry();
+				// var vertices = new Float32Array([
+				// 		 -20.0, -20.0,  0.0,
+				// 		 20.0, -20.0,  0.0,
+				// 		 20.0,  20.0,  0.0,
+
+				// 		 20.0,  20.0,  0.0,
+				// 		-20.0,  20.0,  0.0,
+				// 		-20.0, -20.0,  0.0
+
+				// 	])
+				// // vertices 是顶点的坐标， 三角形需要三个点坐标，四边形下需要6个点，左下和右上
+				// // (vertices,3) 每个顶点坐标有三个值
+				// geometry.addAttribute('position',new THREE.BufferAttribute(vertices,3));
+				
+				return geometry;
+			}
+
+			function plane(){
+				return new THREE.PlaneGeometry(100,100);
+			}
+
+			function sphere(){
+				return new THREE.SphereGeometry(100,20,20);//边数 
+			}
+			function circle(){
+				return new THREE.CircleGeometry(100,8);//半径 边数
+			}
+
+			function circleBuffer(){
+				return new THREE.CircleBufferGeometry(50,10);//边数
+			}
+
+			function cone(){
+				return new THREE.ConeGeometry(100,200,20);//半径 高度，边数
+			}
+
+			function cylinder(){
+				return new THREE.CylinderGeometry(50,50,100,20,20,false); //圆柱体
+			}
+			function Dodecahedron(){
+				return new THREE.DodecahedronGeometry(100,0); //罗马十二面体：每个面等边五角形
+			}
+
+			
+			function icosahedron(){
+				return new THREE.IcosahedronGeometry(100,0); //数学十二面体：每个面等边三角形
+			}
+			
+			function octahedron(){
+				return new THREE.OctahedronGeometry(100,0); //数学8面体：每个面等边三角形
+			}
+
+			function ring() {
+				return new THREE.RingGeometry(80,100,5); //环  （内半径，外半径、边数） 
+			}
+
+			function tetrahedron(){
+				return new THREE.TetrahedronGeometry(100,0); //四面体
+			}
+
+			function torus(){
+				return new THREE.TorusGeometry(100,40,5,20)//（环形体的半径，小横截面积的半径，小横截面的边数，大环形体边数）
+			}
+
+			function torusKnot(){
+				return new THREE.TorusKnotGeometry(100,10,50,100); //穿插的管道
+			}
+
+			function textrun(){
+				var loader = new THREE.FontLoader();
+				loader.load( 'fonts/helvetiker_regular.typeface.json', function ( font ) {
+					loader.parse(font);
+					var geometryText = new THREE.TextGeometry('THREE',{font:font,size:120, height:10, material:0, bevelThickness:1, extrudeMaterial:1});
+					var materialText = new THREE.MeshLambertMaterial({color:0xffffff});
+					meshText = new THREE.Mesh(geometryText,materialText);
+					meshText.position.set(-200,-20,-800);
+					scene.add(meshText);
+					render(meshText);
+				});
+			}
+
+			
+
+			function shapeHeart(){
+				var x = 0, y = 0;
+
+				var heartShape = new THREE.Shape();
+
+				heartShape.moveTo( x + 5, y + 5 );
+				heartShape.bezierCurveTo( x + 5, y + 5, x + 4, y, x, y );
+				heartShape.bezierCurveTo( x - 6, y, x - 6, y + 7,x - 6, y + 7 );
+				heartShape.bezierCurveTo( x - 6, y + 11, x - 3, y + 15.4, x + 5, y + 19 );
+				heartShape.bezierCurveTo( x + 12, y + 15.4, x + 16, y + 11, x + 16, y + 7 );
+				heartShape.bezierCurveTo( x + 16, y + 7, x + 16, y, x + 10, y );
+				heartShape.bezierCurveTo( x + 7, y, x + 5, y + 5, x + 5, y + 5 );
+
+				return new THREE.ShapeGeometry( heartShape ); //平面
+
+				// geometry = new THREE.ExtrudeGeometry(heartShape, {//体
+				// 	amount:10, // 高
+				// 	bevelEnabled:false, 
+				// 	bevelSegents:2,
+				// 	steps:5,
+				// 	bevelSize:12,
+				// 	bevelThickness:1
+				// });
+			}
+			// 三角形
+			// triangle();
+			// triangleBuffter();
+
+			// // 四边形
+			// plane();
+
+			// //球体
+			// sphere();
+
+			// // 圆形
+			// circle();
+			// circleBuffer();
+
+			// //锥题
+			// cone();
+
+			// //圆柱体
+			// cylinder();
+
+			// //罗马十二面体
+			// Dodecahedron();
+			// // 数学十二面体
+			// icosahedron();
+
+			// //数学8面体
+			// octahedron();
+
+			// ring();
+			
+			// //四面体
+			// tetrahedron();
+			// //管道
+			// torus();
+
+			// torusKnot();
+
+			// textrun();
+			// // 心形
+			// shapeHeart();
+
+
+
+			function getGeometry(name){
+				switch(name){
+					case 'triangle':
+						return triangle();
+						break;
+					case 'triangleBuffter':
+						return triangleBuffter();
+						break;
+					case 'plane':
+						return plane();
+						break;
+					case 'sphere':
+						return sphere();
+						break;
+					case 'circle':
+						return circle();
+						break;
+					case 'circleBuffer':
+						return circleBuffer();
+						break;
+					case 'cone':
+						return cone();
+						break;
+					case 'cylinder':
+						return cylinder();
+						break;
+					case 'Dodecahedron':
+						return Dodecahedron();
+						break;
+					case 'icosahedron':
+						return icosahedron();
+						break;
+					case 'octahedron':
+						return octahedron();
+						break;
+					case 'tetrahedron':
+						return tetrahedron();
+						break;
+					case 'ring':
+						return ring();
+						break;
+					case 'torus':
+						return torus();
+						break;
+					case 'torusKnot':
+						return torusKnot();
+						break;
+					case 'textrun':
+						textrun();
+						break;
+					case 'shapeHeart':
+						return shapeHeart();
+						break;
+				}
+				
+			}
+			var mesh,myReq;
+			// 初始化
+			init();
+
+
+			$('#shapes li').click(function(){
+				cancelAnimationFrame(myReq);
+				if(mesh){
+					scene.remove(mesh);
+					mesh = null;
+				}
+				
+				var me = $(this);
+				var name = me.data('name');
+				me.addClass('active');
+				if (name == 'textrun'){
+					getGeometry(name)
+				}else{
+					var geometry = getGeometry(name);
+					var material = new THREE.MeshLambertMaterial({color:0xffffff});
+					mesh = new THREE.Mesh(geometry,material);
+					mesh.position.set(0,0,-800);
+					scene.add(mesh);
+					render();
+				}
+			})
+			
+			
+			// var delta = 0;
+			function render () {
+				
+				// delta+=0.1;
+				// geometry.vertices[0].x = -25+Math.sin(delta)*50;
+				// geometry.verticesNeedUpdate = true;
+				if(mesh){
+					mesh.rotation.x+=0.02;
+					mesh.rotation.y+=0.01;
+				}
+				
+				renderer.render(scene,camera)
+				myReq = requestAnimationFrame(render);
+			}
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+			}
+
+
+		</script>
+	</body>
+</html>
