@@ -13,7 +13,7 @@
 	</head>
 	<body>
 		<!-- 
-			需要查的属性 antialias  WebGLRenderer的属性   MeshLambertMaterial  AmbientLight  vertices  Face3 Float32Array
+			 antialias  WebGLRenderer的属性   MeshLambertMaterial  AmbientLight  vertices  Face3 Float32Array
 			addAttribute
 		 -->
 		<canvas id="myCanvas"></canvas>
@@ -85,7 +85,7 @@
 					// color:0x044d67,
 					transparent:true,
 					opacity:1,
-					// wireframe:true,
+					wireframe:true,
 					// wireframeLinewidth:2,
 					// wireframeLinejoin:'round',
 					// wireframeLinecap:'round',
@@ -129,14 +129,29 @@
 					map:new THREE.TextureLoader().load('textures/metal.jpg'),
 				});
 			}
+			// 设置场景的背景
+			function setSceneBg(){
+				// scene.background = new THREE.Color(0x000000);
+				var cubeTextureLoader = new THREE.CubeTextureLoader();
+
+				cubeTextureLoader.setPath( 'textures/cube/skybox/' );
+
+				var cubeTexture = cubeTextureLoader.load( [
+					'px.jpg', 'nx.jpg',
+					'py.jpg', 'ny.jpg',
+					'pz.jpg', 'nz.jpg',
+				] );
+
+				scene.background = cubeTexture;
+			}
 
 			// 镜面反射
 			function showPhong(){
 				material = new THREE.MeshPhongMaterial({
 					color:0xf3ffe2,
 					specular:0xffffff,
-					shineness:100,
-					// map:new THREE.TextureLoader().load('textures/transition/transition3.png'),
+					shininess:30,
+					map:new THREE.TextureLoader().load('textures/transition/transition3.png'),
 					// normalMap:new THREE.TextureLoader().load('textures/metal.jpg'),
 				});
 
@@ -287,12 +302,12 @@
 
 
 			// showBasic();
-			showNormal();
+			// showNormal();
 			// showPhong();
 			// showLine();
 			// showLineDashed();
 			// showPoint();
-			// showSprite();
+			showSprite();
 
 			render();
 			

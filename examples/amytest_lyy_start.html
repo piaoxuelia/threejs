@@ -19,36 +19,80 @@
 		<canvas id="myCanvas"></canvas>
 		<script src="../build/three.js"></script>
 		<script type="text/javascript">
+
+			// renderer
 			var canvas = document.getElementById('myCanvas');
 			var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:true});
 			renderer.setClearColor(0x555555);
 			renderer.setPixelRatio(window.devicePixelRatio);
 			renderer.setSize(window.innerWidth, window.innerHeight);
 
-			var camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight, 0.1 ,5000)
+			// document.body.appendChild(renderer.domElement);
 
+			//camera
+			var camera = new THREE.PerspectiveCamera(35, window.innerWidth/window.innerHeight, 0.1 ,5000)
+			camera.position.set(0,0,300);
+
+
+			// scene
 			var scene = new THREE.Scene();
+
+
+			// light
 			var light = new THREE.AmbientLight(0xffffff, 0.5);
 			scene.add(light);
-
 			var light1=new THREE.PointLight(0xffffff, 0.5);
 			scene.add(light1);
 
+
+			// geometry
 			var geometry = new THREE.CubeGeometry(100,100,100);
+
+			// material
 			// var material = new THREE.MeshBasicMaterial();
-			var material = new THREE.MeshLambertMaterial({color:0x55aaad});
+			var material = new THREE.MeshLambertMaterial({
+				color:0xffffff, 
+				transparent:true,
+				opacity:.5,
+			});
 			var mesh = new THREE.Mesh(geometry,material);
+
 			mesh.position.set(0,0,-800);
 			scene.add(mesh);
+
+			window.addEventListener( 'resize', onWindowResize, false );
+
+			// 帮助网格
+			var helper = new THREE.GridHelper( 5000, 40, 0x303030, 0x303030 );
+			helper.position.y = -40;
+			scene.add( helper );
+		
+
+			// 坐标辅助线
+			scene.add( new THREE.AxesHelper( 100 ) );
+		
+
 			render();
 			function render () {
 				mesh.rotation.x+=0.02;
-				mesh.rotation.y+=0.01;
+				mesh.rotation.y+=0.02;
+
+				mesh.position.x+=5;
+				mesh.position.y+=3;
+
+				camera.lookAt(mesh.position);
 				renderer.render(scene,camera)
 				requestAnimationFrame(render);
 			
 			}
+			function onWindowResize() {
+				camera.aspect = window.innerWidth / window.innerHeight;
+				camera.updateProjectionMatrix();
+				renderer.setSize( window.innerWidth, window.innerHeight );
+				render();
+			}
 
+			
 
 		</script>
 	</body>

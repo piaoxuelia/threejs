@@ -308,7 +308,7 @@
 				var spherical = new THREE.Spherical();
 
 				for ( var i = 0, l = objects.length; i < l; i ++ ) {
-
+					//反余弦
 					var phi = Math.acos( -1 + ( 2 * i ) / l );
 					var theta = Math.sqrt( l * Math.PI ) * phi;
 
@@ -320,6 +320,7 @@
 
 					object.position.setFromSpherical( spherical );
 
+					
 					vector.copy( object.position ).multiplyScalar( 2 );
 
 					object.lookAt( vector );
